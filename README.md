@@ -1,0 +1,3 @@
+This is yet another assignment from The Odin Project! I've been doing a lot of those lately but you know what? They're fun and I get to learn some cool stuff so I'm going to keep doing them.
+
+In particular, this is connect four. Or at least it's going to be when I'm finished with it. If you don't know what this game is or need specifics on the rules because your memory is a bit fuzzy go ahead and check out the wiki https://en.wikipedia.org/wiki/Connect_Four (kind of a cop out on my part I know)

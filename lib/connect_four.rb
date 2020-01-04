@@ -53,8 +53,10 @@ end
 
 puts "Hello welcome to connect four."
 
-#New game
+=begin
+New game
 game = Game.new
 game.display_cage
 until game.take_turn == true
 end
+=end

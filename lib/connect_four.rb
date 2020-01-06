@@ -2,13 +2,13 @@ require "pry"
 
 class Game
   attr_reader :width, :height, :p1_game_piece, :p2_game_piece
-  attr_accessor :p1_turn
+  attr_accessor :p1_turn, :cage
   def initialize
     @p1_game_piece = "\u25cf".encode('utf-8')
     @p2_game_piece = "\u25cb".encode('utf-8')
     @width = 7
     @height = 6
-    @cage = Array.new(@width) { Array.new(@height, " ") } #Cage is a 7x6 2d array
+    @cage = Array.new(@width) { Array.new(@height, " ") } #cage is a 7x6 2d array
     @p1_turn = true
   end
 
@@ -28,6 +28,11 @@ class Game
   end
 
   def take_turn
+    if @p1_turn
+      puts "Player one"
+    else
+      puts "Player two"
+    end
     print "Pick a column (1-7) to drop a piece into!: "
     user_input = gets.chomp.to_i
     until user_input >= 1 && user_input <= 7
@@ -57,43 +62,35 @@ class Game
     y = arr[1]
 
     #check above
-    if @cage[x][y] == @cage[x][y+1] && @cage[x][y+1] == @cage[x][y+2] &&
-      @cage[x][y+2] == @cage[x][y+3]
+    if @cage[x][y] == @cage[x][y+1] && @cage[x][y+1] == @cage[x][y+2] && @cage[x][y+2] == @cage[x][y+3]
       return true
     end
     #check below
-    if @cage[x][y] == @cage[x][y-1] && @cage[x][y-1] == @cage[x][y-2] &&
-      @cage[x][y-2] == @cage[x][y-3]
+    if @cage[x][y] == @cage[x][y-1] && @cage[x][y-1] == @cage[x][y-2] && @cage[x][y-2] == @cage[x][y-3]
       return true
     end
     #check left
-    if @cage[x][y] == @cage[x-1][y] && @cage[x-1][y] == @cage[x-2][y] &&
-      @cage[x-2][y] == @cage[-3][y]
+    if @cage[x][y] == @cage[x-1][y] && @cage[x-1][y] == @cage[x-2][y] && @cage[x-2][y] == @cage[-3][y]
       return true
     end
     #check right
-    if @cage[x][y] == @cage[x+1][y] && @cage[x+1][y] == @cage[x+2][y] &&
-      @cage[x+2][y] == @cage[+3][y]
+    if @cage[x][y] == @cage[x+1][y] && @cage[x+1][y] == @cage[x+2][y] && @cage[x+2][y] == @cage[+3][y]
       return true
     end
     #check up & right
-    if @cage[x][y] == @cage[x+1][y+1] && @cage[x+1][y+1] == @cage[x+2][y+2] &&
-      @cage[x+2][y+2] == @cage[x+3][y+3]
+    if @cage[x][y] == @cage[x+1][y+1] && @cage[x+1][y+1] == @cage[x+2][y+2] && @cage[x+2][y+2] == @cage[x+3][y+3]
       return true
     end
     #check down & right
-    if @cage[x][y] == @cage[x+1][y-1] && @cage[x+1][y-1] == @cage[x+2][y-2] &&
-      @cage[x+2][y-2] == @cage[x+3][y-3]
+    if @cage[x][y] == @cage[x+1][y-1] && @cage[x+1][y-1] == @cage[x+2][y-2] && @cage[x+2][y-2] == @cage[x+3][y-3]
       return true
     end
     #check down & left
-    if @cage[x][y] == @cage[x-1][y-1] && @cage[x-1][y-1] == @cage[x-2][y-2] &&
-      @cage[x-2][y-2] == @cage[x-3][y-3]
+    if @cage[x][y] == @cage[x-1][y-1] && @cage[x-1][y-1] == @cage[x-2][y-2] && @cage[x-2][y-2] == @cage[x-3][y-3]
       return true
     end
     #check up & left
-    if @cage[x][y] == @cage[x-1][y+1] && @cage[x-1][y+1] == @cage[x-2][y+2] &&
-      @cage[x-2][y+2] == @cage[x-3][y+3]
+    if @cage[x][y] == @cage[x-1][y+1] && @cage[x-1][y+1] == @cage[x-2][y+2] && @cage[x-2][y+2] == @cage[x-3][y+3]
       return true
     end
     false
@@ -106,9 +103,20 @@ def play_game game
   until game.win?(game.take_turn)
     game.display_cage
   end
+  if game.p1_turn == false
+    puts "Player one wins!"
+  else
+    puts "Player two wins!"
+  end
 end
-
 
 #New game
 game = Game.new
-play_game(game)
+#play_game(game)
+
+#horizontal win
+game.cage[0][0] = game.p1_game_piece
+game.cage[1][0] = game.p1_game_piece
+game.cage[2][0] = game.p1_game_piece
+game.cage[3][0] = game.p1_game_piece
+game.win?([3,0])

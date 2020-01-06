@@ -34,7 +34,6 @@ class Game
       print "Invalid input, try again: "
       user_input = gets.chomp.to_i        
     end
-    binding.pry
     y = 0
     x = user_input - 1
     until @cage[x][y] == " "
@@ -53,7 +52,7 @@ class Game
   end
 
   def win?
-    return self.vertical_pass || self.horizontal_pass
+    return self.vertical_pass || self.horizontal_pass || self.diagonal_pass
   end
 
   def vertical_pass
@@ -62,7 +61,7 @@ class Game
 
     @cage.each do |column|
       column.each do |x|
-        if x.nil?
+        if x == " "
           next
         else
           if counter == 4
@@ -88,9 +87,9 @@ class Game
     y = 0
     counter = 0
 
-    until y >= @cage.height
-      until x >= @cage.width
-        if @cage[x][y] == nil
+    until y >= self.height
+      until x >= self.width
+        if @cage[x][y] == " "
         elsif @cage[x][y] == piece
           counter += 1
           if counter == 4
@@ -103,23 +102,26 @@ class Game
         x += 1
       end
       counter = 1
+      x = 0
       y += 1
     end
     false
   end
 
   def diagonal_pass
+    false
   end
 end
 
 
-  puts "Hello welcome to connect four."
+puts "Hello welcome to connect four."
 
 #New game
 game = Game.new
 game.display_cage
 loop do
   game.take_turn
+  binding.pry
   game.display_cage
   if game.win?
     break

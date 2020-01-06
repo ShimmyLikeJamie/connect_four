@@ -1,19 +1,21 @@
+require "pry"
+
 class Game
   attr_reader :width, :height, :p1_game_piece, :p2_game_piece
-  attr_accessor :cage, :p1_turn
+  attr_accessor :p1_turn
   def initialize
     @p1_game_piece = "\u25cf".encode('utf-8')
     @p2_game_piece = "\u25cb".encode('utf-8')
     @width = 7
     @height = 6
-    @cage = Array.new(@width, Array.new(@height, " ")) #Cage is a 7x6 2d array
+    @cage = Array.new(@width) { Array.new(@height, " ") } #Cage is a 7x6 2d array
     @p1_turn = true
   end
 
   def display_cage
-    i = self.height - 1
+    i = @height - 1
     while i >= 0
-      self.cage.each do |x|
+      @cage.each do |x|
         print "|#{x[i]}|"
       end
       puts ""
@@ -32,31 +34,94 @@ class Game
       print "Invalid input, try again: "
       user_input = gets.chomp.to_i        
     end
+    binding.pry
     y = 0
     x = user_input - 1
-    until self.cage[x][y] == " "
+    until @cage[x][y] == " "
       y += 1
-      if i >= self.height
+      if y >= @height
         return "Error, column full"
       end
     end
-    if self.p1_turn
-      self.cage[x][y] = self.p1_game_piece
-      p1_turn = false
+    if @p1_turn
+      @cage[x][y] = @p1_game_piece
+      @p1_turn = false
     else
-      self.cage[x][y] = self.p2_game_piece
-      p1_turn = true
+      @cage[x][y] = @p2_game_piece
+      @p1_turn = true
     end
-    return true
+  end
+
+  def win?
+    return self.vertical_pass || self.horizontal_pass
+  end
+
+  def vertical_pass
+    piece = nil
+    counter = 0
+
+    @cage.each do |column|
+      column.each do |x|
+        if x.nil?
+          next
+        else
+          if counter == 4
+            return true
+          else
+            if x == piece
+              counter += 1
+            else
+              piece = x
+              counter = 1
+            end
+          end
+        end
+      end
+      counter = 0
+    end
+    false
+  end
+
+  def horizontal_pass
+    piece = nil
+    x = 0
+    y = 0
+    counter = 0
+
+    until y >= @cage.height
+      until x >= @cage.width
+        if @cage[x][y] == nil
+        elsif @cage[x][y] == piece
+          counter += 1
+          if counter == 4
+            return true
+          end
+        else
+          piece = @cage[x][y]
+          counter = 1
+        end
+        x += 1
+      end
+      counter = 1
+      y += 1
+    end
+    false
+  end
+
+  def diagonal_pass
   end
 end
 
-puts "Hello welcome to connect four."
 
-=begin
-New game
+  puts "Hello welcome to connect four."
+
+#New game
 game = Game.new
 game.display_cage
-until game.take_turn == true
+loop do
+  game.take_turn
+  game.display_cage
+  if game.win?
+    break
+  end
 end
-=end

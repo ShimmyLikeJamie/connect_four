@@ -70,11 +70,11 @@ class Game
       return true
     end
     #check left
-    if @cage[x][y] == @cage[x-1][y] && @cage[x-1][y] == @cage[x-2][y] && @cage[x-2][y] == @cage[-3][y]
+    if @cage[x][y] == @cage[x-1][y] && @cage[x-1][y] == @cage[x-2][y] && @cage[x-2][y] == @cage[x-3][y]
       return true
     end
     #check right
-    if @cage[x][y] == @cage[x+1][y] && @cage[x+1][y] == @cage[x+2][y] && @cage[x+2][y] == @cage[+3][y]
+    if @cage[x][y] == @cage[x+1][y] && @cage[x+1][y] == @cage[x+2][y] && @cage[x+2][y] == @cage[x+3][y]
       return true
     end
     #check up & right
@@ -114,7 +114,7 @@ end
 game = Game.new
 #play_game(game)
 
-#horizontal win
+binding.pry
 game.cage[0][0] = game.p1_game_piece
 game.cage[1][0] = game.p1_game_piece
 game.cage[2][0] = game.p1_game_piece

@@ -49,81 +49,66 @@ class Game
       @cage[x][y] = @p2_game_piece
       @p1_turn = true
     end
+    return [x, y]
   end
 
-  def win?
-    return self.vertical_pass || self.horizontal_pass || self.diagonal_pass
-  end
+  def win? arr
+    x = arr[0]
+    y = arr[1]
 
-  def vertical_pass
-    piece = nil
-    counter = 0
-
-    @cage.each do |column|
-      column.each do |x|
-        if x == " "
-          next
-        else
-          if counter == 4
-            return true
-          else
-            if x == piece
-              counter += 1
-            else
-              piece = x
-              counter = 1
-            end
-          end
-        end
-      end
-      counter = 0
+    #check above
+    if @cage[x][y] == @cage[x][y+1] && @cage[x][y+1] == @cage[x][y+2] &&
+      @cage[x][y+2] == @cage[x][y+3]
+      return true
     end
-    false
-  end
-
-  def horizontal_pass
-    piece = nil
-    x = 0
-    y = 0
-    counter = 0
-
-    until y >= self.height
-      until x >= self.width
-        if @cage[x][y] == " "
-        elsif @cage[x][y] == piece
-          counter += 1
-          if counter == 4
-            return true
-          end
-        else
-          piece = @cage[x][y]
-          counter = 1
-        end
-        x += 1
-      end
-      counter = 1
-      x = 0
-      y += 1
+    #check below
+    if @cage[x][y] == @cage[x][y-1] && @cage[x][y-1] == @cage[x][y-2] &&
+      @cage[x][y-2] == @cage[x][y-3]
+      return true
     end
-    false
-  end
-
-  def diagonal_pass
+    #check left
+    if @cage[x][y] == @cage[x-1][y] && @cage[x-1][y] == @cage[x-2][y] &&
+      @cage[x-2][y] == @cage[-3][y]
+      return true
+    end
+    #check right
+    if @cage[x][y] == @cage[x+1][y] && @cage[x+1][y] == @cage[x+2][y] &&
+      @cage[x+2][y] == @cage[+3][y]
+      return true
+    end
+    #check up & right
+    if @cage[x][y] == @cage[x+1][y+1] && @cage[x+1][y+1] == @cage[x+2][y+2] &&
+      @cage[x+2][y+2] == @cage[x+3][y+3]
+      return true
+    end
+    #check down & right
+    if @cage[x][y] == @cage[x+1][y-1] && @cage[x+1][y-1] == @cage[x+2][y-2] &&
+      @cage[x+2][y-2] == @cage[x+3][y-3]
+      return true
+    end
+    #check down & left
+    if @cage[x][y] == @cage[x-1][y-1] && @cage[x-1][y-1] == @cage[x-2][y-2] &&
+      @cage[x-2][y-2] == @cage[x-3][y-3]
+      return true
+    end
+    #check up & left
+    if @cage[x][y] == @cage[x-1][y+1] && @cage[x-1][y+1] == @cage[x-2][y+2] &&
+      @cage[x-2][y+2] == @cage[x-3][y+3]
+      return true
+    end
     false
   end
 end
 
+def play_game game
+  puts "Hello welcome to connect four."
+  game.display_cage
+  until game.win?(game.take_turn)
+    game.display_cage
+  end
+end
 
-puts "Hello welcome to connect four."
 
 #New game
 game = Game.new
-game.display_cage
-loop do
-  game.take_turn
-  binding.pry
-  game.display_cage
-  if game.win?
-    break
-  end
-end
+play_game(game)

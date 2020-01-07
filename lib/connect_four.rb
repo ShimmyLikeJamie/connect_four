@@ -21,7 +21,7 @@ class Game
       puts ""
       i -= 1
     end
-    7.times do |x|
+    @width.times do |x|
       print " #{x + 1} "
     end
     puts ""

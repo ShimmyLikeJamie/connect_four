@@ -112,11 +112,4 @@ end
 
 #New game
 game = Game.new
-#play_game(game)
-
-binding.pry
-game.cage[0][0] = game.p1_game_piece
-game.cage[1][0] = game.p1_game_piece
-game.cage[2][0] = game.p1_game_piece
-game.cage[3][0] = game.p1_game_piece
-game.win?([3,0])
+play_game(game)

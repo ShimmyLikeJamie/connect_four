@@ -35,7 +35,7 @@ class Game
     end
     print "Pick a column (1-7) to drop a piece into!: "
     user_input = gets.chomp.to_i
-    until user_input >= 1 && user_input <= 7
+    until user_input >= 1 && user_input <= @width
       print "Invalid input, try again: "
       user_input = gets.chomp.to_i        
     end
